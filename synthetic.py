@@ -8,7 +8,10 @@ class Dictionaries:
     first_letters = defaultdict(int)
 
 
-def words(filename, num):
+def words(filename, num, seed=None):
+    if seed is not None:
+        random.seed(seed)
+
     training_words = read_file(filename)
     dictionaries = create_dictionary(training_words)
     word_list = generate_words(dictionaries.first_letters, dictionaries.dictionary, num)
