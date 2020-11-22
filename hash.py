@@ -103,8 +103,12 @@ class HashTable:
         self.array = [None] * length
 
     def hash(self, key):
+        unicode_sum = 0
+        for letter in key:
+            unicode_sum += ord(letter)
+
         length = len(self.array)
-        return hash(key) % length
+        return unicode_sum % length
 
     def add(self, value):
         """Add a value to our array by its key"""
