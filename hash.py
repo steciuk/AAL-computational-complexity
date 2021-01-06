@@ -94,8 +94,8 @@ class LinkedList:
             else:
                 previous = current
             current = current.get_next()
-        if not found:
-            raise ValueError("Data not in list")
+        #if not found:
+        #    raise ValueError("Data not in list")
 
 
 class HashTable:
@@ -118,6 +118,10 @@ class HashTable:
             self.array[index].insert(value)
         else:
             self.array[index].insert(value)
+
+    def find(self, value):
+        index = self.hash(value)
+        self.array[index].search(value)
 
     def add_all(self, array):
         for v in array:
