@@ -1,7 +1,8 @@
 import argparse
 import time
 import synthetic
-from hash import HashTable, LinkedList
+import matplotlib.pyplot as plt
+from hash import HashTable
 
 
 def words_ready_mode(file_in, file_del=None):
@@ -85,17 +86,22 @@ def gen_step_mode(file_in, num, seed, file_del=None):
         print("ERROR: Invalid value was passed to the program.")
         return -1
 
-    answer = None
+    with_deletion = True
     if file_del is None:
+        answer = None
         answer = input("You did not specify .txt file with words to delete."
                        "Should I use generated words instead? [Y/N]: ")
+        if answer not in {'Y', 'y'}:
+            with_deletion = False
 
     words_num = 0
+    results = []
     while True:
         words_num += step_val
         if words_num > num:
             break
         print(words_num, " words")
+        results.append(words_num)
         words = synthetic.words(file_in, words_num, seed)
 
         hash_table = HashTable(size)
@@ -103,26 +109,58 @@ def gen_step_mode(file_in, num, seed, file_del=None):
         hash_table.add_all(words)
         end = time.perf_counter()
         print("Adding time [s]:", end - begin)
+        results.append(end - begin)
 
         begin = time.perf_counter()
         for word in words:
             hash_table.find(word)
         end = time.perf_counter()
         print("Enumerating time [s]:", end - begin)
+        results.append(end - begin)
 
-        if answer == 'y' or answer == 'Y':
+        if with_deletion is True:
+            if file_del is not None:
+                words = synthetic.read_file(file_del)
+
             begin = time.perf_counter()
             for word in words:
                 hash_table.delete_all(word)
             end = time.perf_counter()
             print("Deletion time [s]:", end - begin)
-        elif file_del is not None:
-            words = synthetic.read_file(file_del)
-            begin = time.perf_counter()
-            for word in words:
-                hash_table.delete_all(word)
-            end = time.perf_counter()
-            print("Deletion time [s]:", end - begin)
+            results.append(end - begin)
+
+    plot_data(results, with_deletion)
+
+
+def plot_data(data, with_deletion):
+    i = 0
+    modulo = 4 if with_deletion else 3
+    name = []
+    adding = []
+    searching = []
+    deleting = []
+
+    for x in data:
+        if i % modulo == 0:
+            name.append(x)
+        elif i % modulo == 1:
+            adding.append(x)
+        elif i % modulo == 2:
+            searching.append(x)
+        else:
+            deleting.append(x)
+        i += 1
+
+    plt.plot(name, adding, label='adding')
+    plt.plot(name, searching, label='searching')
+    if with_deletion:
+        plt.plot(name, deleting, label='deleting')
+
+    plt.xlabel('liczba elementow')
+    plt.ylabel('czas [s]')
+    plt.legend()
+
+    plt.show()
 
 
 def setup_parser():
@@ -149,7 +187,7 @@ def setup_parser():
 
     group_m = hash_parser.add_argument_group("mode 2/3 specific values")
     group_m.add_argument("-n", "--number", type=int, default=1000,
-                         help="number of words to generate (mode 2/3). Default value = 1000")
+                         help="maximum number of words to generate (mode 2/3). Default value = 1000")
     group_m.add_argument("-s", "--seed", type=int, default=None,
                          help="seed for random words; if not passed, the seed is randomized")
 
