@@ -1,7 +1,7 @@
 import argparse
 import time
-import synthetic
 import matplotlib.pyplot as plt
+import synthetic
 from hash import HashTable
 
 
@@ -13,22 +13,25 @@ def words_ready_mode(file_in, file_del=None):
     try:
         size = int(size)
     except ValueError as e:
-        print("ERROR: Invalid value was passed to the program.")
+        print("ERROR: Invalid value was passed to the program.\n", e)
         return -1
+
+    with_deletion = True
+    if file_del is None:
+        answer = input("You did not specify .txt file with words to delete."
+                       "Should I use generated words instead? [Y/N]: ")
+        if answer not in {'Y', 'y'}:
+            with_deletion = False
 
     hash_table = HashTable(size)
     hash_table.add_all(words)
     for arr in hash_table.array:
         print(arr)
 
-    if file_del is None:
-        answer = input("You did not specify .txt file with words to delete. "
-                       "Should I use passed in words instead? [Y/N]: ")
-        if answer == 'y' or answer == 'Y':
-            for word in words:
-                hash_table.delete_all(word)
-    else:
-        words = synthetic.read_file(file_del)
+    if with_deletion is True:
+        if file_del is not None:
+            words = synthetic.read_file(file_del)
+
         for word in words:
             hash_table.delete_all(word)
 
@@ -43,8 +46,15 @@ def generation_mode(file_in, num, seed, file_del=None):
     try:
         size = int(size)
     except ValueError as e:
-        print("ERROR: Invalid value was passed to the program.")
+        print("ERROR: Invalid value was passed to the program.\n", e)
         return -1
+
+    with_deletion = True
+    if file_del is None:
+        answer = input("You did not specify .txt file with words to delete."
+                       "Should I use generated words instead? [Y/N]: ")
+        if answer not in {'Y', 'y'}:
+            with_deletion = False
 
     hash_table = HashTable(size)
     begin = time.perf_counter()
@@ -58,17 +68,10 @@ def generation_mode(file_in, num, seed, file_del=None):
     end = time.perf_counter()
     print("Enumerating time [s]:", end - begin)
 
-    if file_del is None:
-        answer = input("You did not specify .txt file with words to delete."
-                       "Should I use generated words instead? [Y/N]: ")
-        if answer == 'y' or answer == 'Y':
-            begin = time.perf_counter()
-            for word in words:
-                hash_table.delete_all(word)
-            end = time.perf_counter()
-            print("Deletion time [s]:", end - begin)
-    else:
-        words = synthetic.read_file(file_del)
+    if with_deletion is True:
+        if file_del is not None:
+            words = synthetic.read_file(file_del)
+
         begin = time.perf_counter()
         for word in words:
             hash_table.delete_all(word)
@@ -83,12 +86,11 @@ def gen_step_mode(file_in, num, seed, file_del=None):
         size = int(size)
         step_val = int(step_val)
     except ValueError as e:
-        print("ERROR: Invalid value was passed to the program.")
+        print("ERROR: Invalid value was passed to the program.\n", e)
         return -1
 
     with_deletion = True
     if file_del is None:
-        answer = None
         answer = input("You did not specify .txt file with words to delete."
                        "Should I use generated words instead? [Y/N]: ")
         if answer not in {'Y', 'y'}:
@@ -129,10 +131,10 @@ def gen_step_mode(file_in, num, seed, file_del=None):
             print("Deletion time [s]:", end - begin)
             results.append(end - begin)
 
-    plot_data(results, with_deletion)
+    plot_data(results, with_deletion, num, size)
 
 
-def plot_data(data, with_deletion):
+def plot_data(data, with_deletion, el, lists):
     i = 0
     modulo = 4 if with_deletion else 3
     name = []
@@ -151,13 +153,14 @@ def plot_data(data, with_deletion):
             deleting.append(x)
         i += 1
 
-    plt.plot(name, adding, label='adding')
-    plt.plot(name, searching, label='searching')
+    plt.plot(name, adding, label="adding")
+    plt.plot(name, searching, label="searching")
     if with_deletion:
-        plt.plot(name, deleting, label='deleting')
+        plt.plot(name, deleting, label="deleting")
 
-    plt.xlabel('liczba elementow')
-    plt.ylabel('czas [s]')
+    plt.title("Num of elements = {}, num of lists = {}".format(el, lists))
+    plt.xlabel("elements")
+    plt.ylabel("time [s]")
     plt.legend()
 
     plt.show()
@@ -175,7 +178,7 @@ def setup_parser():
                            help="specifies the mode in which program will run; "
                                 "1 - with words ready to use for testing, 2 - with automatic generation and analysis"
                                 "3 - with automatic generation and analysis with step value; all modes ask the user "
-                                "how many lists should the hash table have and if it should use the generated/passed in "
+                                "how many lists should the hashmap have and if it should use the generated/passed in "
                                 "words for deletion operation, additionally mode 3 asks for the step value")
     group_req.add_argument("-i", "--input", required=True,
                            help="input file with words (mode 1)/text sample to generate words (mode 2/3)")
@@ -204,4 +207,3 @@ if __name__ == "__main__":
         generation_mode(args.input, args.number, args.seed, args.delete)
     else:
         gen_step_mode(args.input, args.number, args.seed, args.delete)
-
