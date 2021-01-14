@@ -60,13 +60,13 @@ def generation_mode(file_in, num, seed, file_del=None):
     begin = time.perf_counter()
     hash_table.add_all(words)
     end = time.perf_counter()
-    print("Adding time [s]:", end - begin)
+    print("Adding time [s]: {:.6f}".format(end - begin))
 
     begin = time.perf_counter()
     for word in words:
         hash_table.find(word)
     end = time.perf_counter()
-    print("Enumerating time [s]:", end - begin)
+    print("Enumerating time [s]: {:.6f}".format(end - begin))
 
     if with_deletion is True:
         if file_del is not None:
@@ -76,7 +76,7 @@ def generation_mode(file_in, num, seed, file_del=None):
         for word in words:
             hash_table.delete_all(word)
         end = time.perf_counter()
-        print("Deletion time [s]:", end - begin)
+        print("Deleting time [s]: {:.6f}".format(end - begin))
 
 
 def gen_step_mode(file_in, num, seed, file_del=None):
@@ -110,14 +110,14 @@ def gen_step_mode(file_in, num, seed, file_del=None):
         begin = time.perf_counter()
         hash_table.add_all(words)
         end = time.perf_counter()
-        print("Adding time [s]:", end - begin)
+        print("Adding time [s]: {:.6f}".format(end - begin))
         results.append(end - begin)
 
         begin = time.perf_counter()
         for word in words:
             hash_table.find(word)
         end = time.perf_counter()
-        print("Enumerating time [s]:", end - begin)
+        print("Enumerating time [s]: {:.6f}".format(end - begin))
         results.append(end - begin)
 
         if with_deletion is True:
@@ -128,23 +128,23 @@ def gen_step_mode(file_in, num, seed, file_del=None):
             for word in words:
                 hash_table.delete_all(word)
             end = time.perf_counter()
-            print("Deletion time [s]:", end - begin)
+            print("Deleting time [s]: {:.6f}".format(end - begin))
             results.append(end - begin)
 
-    plot_data(results, with_deletion, num, size)
+    analyse_data(results, with_deletion, num, size)
 
 
-def plot_data(data, with_deletion, el, lists):
+def analyse_data(data, with_deletion, el, lists):
     i = 0
     modulo = 4 if with_deletion else 3
-    name = []
+    number = []
     adding = []
     searching = []
     deleting = []
 
     for x in data:
         if i % modulo == 0:
-            name.append(x)
+            number.append(x)
         elif i % modulo == 1:
             adding.append(x)
         elif i % modulo == 2:
@@ -153,10 +153,19 @@ def plot_data(data, with_deletion, el, lists):
             deleting.append(x)
         i += 1
 
-    plt.plot(name, adding, label="adding")
-    plt.plot(name, searching, label="searching")
+    print("||\tn\t||\tAdd T(n)\t||\tq(n)\t||\tEnum. T(n)\t||\tq(n)\t||\tDel. T(n)\t||\tq(n)\t||")
+
+    i = 0
+    length = len(number)
+    while i < length:
+        print("||\t{}\t||\t{:.6f}\t||\t0\t||\t{:.6f}\t||\t0\t||\t{:.6f}\t||\t0\t||"
+              .format(number[i], adding[i], searching[i], deleting[i]))
+        i += 1
+
+    plt.plot(number, adding, label="adding")
+    plt.plot(number, searching, label="searching")
     if with_deletion:
-        plt.plot(name, deleting, label="deleting")
+        plt.plot(number, deleting, label="deleting")
 
     plt.title("Num of elements = {}, num of lists = {}".format(el, lists))
     plt.xlabel("elements")

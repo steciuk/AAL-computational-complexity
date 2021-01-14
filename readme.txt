@@ -1,5 +1,3 @@
-# AAL - tablica haszująca
-
 *Autorzy*
 Lukasz Pokorzyński, nr 300251
 l.pokorzynski@stud.elka.pw.edu.pl
