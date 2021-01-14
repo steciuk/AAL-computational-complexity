@@ -2,7 +2,7 @@
 Lukasz Pokorzyński, nr 300251
 l.pokorzynski@stud.elka.pw.edu.pl
 Adam Steciuk, nr 300263
-!!!email!!!
+a.steciuk@stud.elka.pw.edu.pl
 
 *Temat projektu*
 Wariant W11 i W21
@@ -34,7 +34,7 @@ main.py [-h] -m {1,2,3} -i INPUT [-d DELETE] [-n NUMBER] [-s SEED]
 -i: przekazanie pliku z danymi wejściowymi do programu, dla trybu 1 są to gotowe słowa, dla trybów 2 i 3 jest to próbka
 tekstu polskiego do automatycznej generacji słów
 -d: parametr opcjonalny; przekazanie pliku zawierającego słowa do operacji usuwania, jeżeli taki plik nie zostanie
-przekazany, to program spyta użytkownika, czy użyć słów przekazanych/wygenerowanych
+przekazany, to program użyje słów przekazanych/wygenerowanych
 -n: parametr opcjonalny; maksymalna liczba słów do wygenerowania, domyślnie liczba 1000
 -s: parametr opcjonalny; ziarno generatora losowego, domyślnie nie jest przekazywane
 
@@ -56,7 +56,7 @@ Zastosowana funkcja haszująca:
 Słowo wprowadzane do funkcji jest odczytywane litera po literze, a wartości unicode liter są po kolei dodawane do sumy.
 Suma ta następnie jest poddawaniu dzieleniu modulo przez wielkość tablicy. Uzyskana wartość z dzielenia jest
 haszem danego słowa.
-Wszystkie wymagane struktury takie jak lista jednokierunkowa oraz tablica haszująca zostały zaimplementowane od zera.
+Wszelkie potrzebne struktury danych razem z algorytmami pomocniczymi zostały zaimplementowane od zera.
 
 *Moduły źródłowe*
 Kod źródłowy został podzielony na następujace pliki:
@@ -65,5 +65,5 @@ hash.py         - plik implementujący klasę węzła, listy jednokierunkowej or
 main.py         - interfejs użytkownika
 
 *Informacje dodatkowe*
-Do prawidłowego działania programu wyagane jest zainstalowanie biblioteki matplotlib, która odpowiedzialna jest
+Do prawidłowego działania programu wymagane jest zainstalowanie biblioteki matplotlib, która odpowiedzialna jest
 za wizualizację wyników na wykresie.

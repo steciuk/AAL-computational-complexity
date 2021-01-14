@@ -119,6 +119,13 @@ class HashTable:
         else:
             self.array[index].insert(value)
 
+    def longest_list(self):
+        length = 0
+        for list in self.array:
+            if list.size() > length:
+                length = list.size()
+        return length
+
     def find(self, value):
         index = self.hash(value)
         self.array[index].search(value)

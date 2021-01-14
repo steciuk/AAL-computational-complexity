@@ -16,24 +16,15 @@ def words_ready_mode(file_in, file_del=None):
         print("ERROR: Invalid value was passed to the program.\n", e)
         return -1
 
-    with_deletion = True
-    if file_del is None:
-        answer = input("You did not specify .txt file with words to delete."
-                       "Should I use generated words instead? [Y/N]: ")
-        if answer not in {'Y', 'y'}:
-            with_deletion = False
-
     hash_table = HashTable(size)
     hash_table.add_all(words)
     for arr in hash_table.array:
         print(arr)
 
-    if with_deletion is True:
-        if file_del is not None:
-            words = synthetic.read_file(file_del)
-
-        for word in words:
-            hash_table.delete_all(word)
+    if file_del is not None:
+        words = synthetic.read_file(file_del)
+    for word in words:
+        hash_table.delete_all(word)
 
     for arr in hash_table.array:
         print(arr)
@@ -49,13 +40,6 @@ def generation_mode(file_in, num, seed, file_del=None):
         print("ERROR: Invalid value was passed to the program.\n", e)
         return -1
 
-    with_deletion = True
-    if file_del is None:
-        answer = input("You did not specify .txt file with words to delete."
-                       "Should I use generated words instead? [Y/N]: ")
-        if answer not in {'Y', 'y'}:
-            with_deletion = False
-
     hash_table = HashTable(size)
     begin = time.perf_counter()
     hash_table.add_all(words)
@@ -68,15 +52,13 @@ def generation_mode(file_in, num, seed, file_del=None):
     end = time.perf_counter()
     print("Enumerating time [s]: {:.6f}".format(end - begin))
 
-    if with_deletion is True:
-        if file_del is not None:
-            words = synthetic.read_file(file_del)
-
-        begin = time.perf_counter()
-        for word in words:
-            hash_table.delete_all(word)
-        end = time.perf_counter()
-        print("Deleting time [s]: {:.6f}".format(end - begin))
+    if file_del is not None:
+        words = synthetic.read_file(file_del)
+    begin = time.perf_counter()
+    for word in words:
+        hash_table.delete_all(word)
+    end = time.perf_counter()
+    print("Deleting time [s]: {:.6f}".format(end - begin))
 
 
 def gen_step_mode(file_in, num, seed, file_del=None):
@@ -88,13 +70,6 @@ def gen_step_mode(file_in, num, seed, file_del=None):
     except ValueError as e:
         print("ERROR: Invalid value was passed to the program.\n", e)
         return -1
-
-    with_deletion = True
-    if file_del is None:
-        answer = input("You did not specify .txt file with words to delete."
-                       "Should I use generated words instead? [Y/N]: ")
-        if answer not in {'Y', 'y'}:
-            with_deletion = False
 
     words_num = 0
     results = []
@@ -120,23 +95,21 @@ def gen_step_mode(file_in, num, seed, file_del=None):
         print("Enumerating time [s]: {:.6f}".format(end - begin))
         results.append(end - begin)
 
-        if with_deletion is True:
-            if file_del is not None:
-                words = synthetic.read_file(file_del)
+        if file_del is not None:
+            words = synthetic.read_file(file_del)
+        begin = time.perf_counter()
+        for word in words:
+            hash_table.delete_all(word)
+        end = time.perf_counter()
+        print("Deleting time [s]: {:.6f}".format(end - begin))
+        results.append(end - begin)
 
-            begin = time.perf_counter()
-            for word in words:
-                hash_table.delete_all(word)
-            end = time.perf_counter()
-            print("Deleting time [s]: {:.6f}".format(end - begin))
-            results.append(end - begin)
-
-    analyse_data(results, with_deletion, num, size)
+    analyse_data(results, num, size)
 
 
-def analyse_data(data, with_deletion, el, lists):
+def analyse_data(data, el, lists):
     i = 0
-    modulo = 4 if with_deletion else 3
+    modulo = 4
     number = []
     adding = []
     searching = []
@@ -153,19 +126,11 @@ def analyse_data(data, with_deletion, el, lists):
             deleting.append(x)
         i += 1
 
-    print("||\tn\t||\tAdd T(n)\t||\tq(n)\t||\tEnum. T(n)\t||\tq(n)\t||\tDel. T(n)\t||\tq(n)\t||")
-
-    i = 0
-    length = len(number)
-    while i < length:
-        print("||\t{}\t||\t{:.6f}\t||\t0\t||\t{:.6f}\t||\t0\t||\t{:.6f}\t||\t0\t||"
-              .format(number[i], adding[i], searching[i], deleting[i]))
-        i += 1
+    table_printer(number, adding, searching, deleting)
 
     plt.plot(number, adding, label="adding")
     plt.plot(number, searching, label="searching")
-    if with_deletion:
-        plt.plot(number, deleting, label="deleting")
+    plt.plot(number, deleting, label="deleting")
 
     plt.title("Num of elements = {}, num of lists = {}".format(el, lists))
     plt.xlabel("elements")
@@ -173,6 +138,43 @@ def analyse_data(data, with_deletion, el, lists):
     plt.legend()
 
     plt.show()
+
+
+def table_printer(number, adding, searching, deleting):
+    if len(number) % 2 == 0:
+        index = int(len(number) / 2 - 1)
+        median_num = int((number[index] + number[index + 1]) / 2)
+        median_add = (adding[index] + adding[index + 1]) / 2
+        median_search = (searching[index] + searching[index + 1]) / 2
+        median_del = (deleting[index] + deleting[index + 1]) / 2
+    else:
+        index = int(len(number) / 2)
+        median_num = number[index]
+        median_add = adding[index]
+        median_search = searching[index]
+        median_del = deleting[index]
+
+    print("||\tn\t||\tAdd T(n)\t||\tAdd q(n)\t||\tEnum. T(n)\t||\tEnum. q(n)\t||\tDel. T(n)\t||\tDel. q(n)\t||")
+
+    i = 0
+    length = len(number)
+    while i < length:
+        print("||\t{}\t||\t{:.6f}\t||\t{:.6f}\t||\t{:.6f}\t||\t{:.6f}\t||\t{:.6f}\t||\t{:.6f}\t||"
+              .format(number[i],
+                      adding[i],
+                      calc_q(number[i], adding[i], median_add, median_num, False),
+                      searching[i],
+                      calc_q(number[i], searching[i], median_search, median_num, True),
+                      deleting[i],
+                      calc_q(number[i], deleting[i], median_del, median_num, True)) )
+        i += 1
+
+
+def calc_q(num, time, med1, med2, pow):
+    if pow:
+        return time / (num * num) * (med2 * med2) / med1
+    else:
+        return time / num * med2 / med1
 
 
 def setup_parser():
