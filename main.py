@@ -1,3 +1,8 @@
+#
+# Lukasz Pokorzyński, Adam Steciuk
+# main.py - main analyser
+#
+
 import argparse
 import time
 import matplotlib.pyplot as plt
@@ -166,7 +171,7 @@ def table_printer(number, adding, searching, deleting):
                       searching[i],
                       calc_q(number[i], searching[i], median_search, median_num, True),
                       deleting[i],
-                      calc_q(number[i], deleting[i], median_del, median_num, True)) )
+                      calc_q(number[i], deleting[i], median_del, median_num, True)))
         i += 1
 
 
@@ -189,15 +194,14 @@ def setup_parser():
                            help="specifies the mode in which program will run; "
                                 "1 - with words ready to use for testing, 2 - with automatic generation and analysis "
                                 "3 - with automatic generation and analysis with step value; all modes ask the user "
-                                "how many lists should the hashmap have and if it should use the generated/passed in "
-                                "words for deletion operation, additionally mode 3 asks for the step value")
+                                "how many lists should the hashmap have, additionally mode 3 asks for the step value")
     group_req.add_argument("-i", "--input", required=True,
                            help="input file with words (mode 1)/text sample to generate words (mode 2/3)")
 
     group_opt = hash_parser.add_argument_group('optional arguments')
     group_opt.add_argument("-d", "--delete", default=None,
                            help="input file with words for optional deleting from hashmap; if not specified, "
-                                "program will ask if it should use generated/passed words instead")
+                                "program will use generated words for deletion")
 
     group_m = hash_parser.add_argument_group("mode 2/3 specific values")
     group_m.add_argument("-n", "--number", type=int, default=1000,

@@ -1,3 +1,8 @@
+#
+# Lukasz Pokorzyński, Adam Steciuk
+# synthetic.py - words generator
+#
+
 import re
 import argparse
 from collections import defaultdict

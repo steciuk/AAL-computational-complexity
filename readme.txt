@@ -24,7 +24,7 @@ słowa"). Prawdopodobieństwa należy uzyskać z próbki tekstu polskiego.
 *Obsługa programu*
 Program jest uruchamiany z linii poleceń interpretera Python w następujący sposób:
 
-main.py [-h] -m {1,2,3} -i INPUT [-d DELETE] [-n NUMBER] [-s SEED]
+python main.py [-h] -m {1,2,3} -i INPUT [-d DELETE] [-n NUMBER] [-s SEED]
 
 -h: opcja wyświetlająca tekst pomocniczy objaśniający działanie programu i pobierane parametry
 -m: tryb wykonywania programu:

@@ -1,3 +1,8 @@
+#
+# Lukasz Pokorzyński, Adam Steciuk
+# hash.py - hashmap and singly linked list implementation
+#
+
 class Node:
     def __init__(self, data=None, next_node=None):
         self.data = data
@@ -94,8 +99,6 @@ class LinkedList:
             else:
                 previous = current
             current = current.get_next()
-        #if not found:
-        #    raise ValueError("Data not in list")
 
 
 class HashTable:
@@ -111,7 +114,6 @@ class HashTable:
         return unicode_sum % length
 
     def add(self, value):
-        """Add a value to our array by its key"""
         index = self.hash(value)
         if self.array[index] is None:
             self.array[index] = LinkedList()
