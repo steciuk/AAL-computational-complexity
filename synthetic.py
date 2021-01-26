@@ -79,18 +79,13 @@ def setup_parser():
 
     group_req = hash_parser.add_argument_group("arguments")
     group_req.add_argument("-i", "--input", required=True,
-                           help="specifies the mode in which program will run; "
-                                "1 - with words ready to use for testing, 2 - with automatic generation and analysis "
-                                "3 - with automatic generation and analysis with step value; all modes ask the user "
-                                "how many lists should the hashmap have and if it should use the generated/passed in "
-                                "words for deletion operation, additionally mode 3 asks for the step value")
+                           help="input file with words")
     group_req.add_argument("-n", "--number", type=int, required=True,
-                           help="input file with words (mode 1)/text sample to generate words (mode 2/3)")
+                           help="number of words generated")
     group_req.add_argument("-o", "--output", required=True,
-                           help="input file with words (mode 1)/text sample to generate words (mode 2/3)")
+                           help="output file")
     group_req.add_argument("-s", "--seed", required=False, default=None,
-                           help="input file with words (mode 1)/text sample to generate words (mode 2/3)")
-
+                           help="optional seed for generation")
 
     return hash_parser
 
@@ -102,3 +97,5 @@ if __name__ == "__main__":
     with open(args.output, 'w') as file:
         for word in words_list:
             file.write(str(word + " "))
+
+    print("Generated successfully to", args.output)
