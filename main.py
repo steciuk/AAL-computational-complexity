@@ -178,8 +178,8 @@ def calc_q(num, time, med1, med2, pow):
 
 
 def setup_parser():
-    hash_parser = argparse.ArgumentParser(description="Program which calculates time of adding,"
-                                                      "enumerating and optionally deleting elements from hashmap "
+    hash_parser = argparse.ArgumentParser(description="Program which calculates time of adding, "
+                                                      "enumerating and deleting elements from hashmap "
                                                       "consisting of singly linked lists", add_help=False)
     group_help = hash_parser.add_argument_group()
     group_help.add_argument("-h", "--help", action="help", help="show this help message and exit")
@@ -187,7 +187,7 @@ def setup_parser():
     group_req = hash_parser.add_argument_group("required arguments")
     group_req.add_argument("-m", "--mode", type=int, choices=[1, 2, 3], required=True,
                            help="specifies the mode in which program will run; "
-                                "1 - with words ready to use for testing, 2 - with automatic generation and analysis"
+                                "1 - with words ready to use for testing, 2 - with automatic generation and analysis "
                                 "3 - with automatic generation and analysis with step value; all modes ask the user "
                                 "how many lists should the hashmap have and if it should use the generated/passed in "
                                 "words for deletion operation, additionally mode 3 asks for the step value")
