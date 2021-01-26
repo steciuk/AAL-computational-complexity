@@ -99,7 +99,7 @@ def gen_step_mode(file_in, num, seed, file_del=None):
             words = synthetic.read_file(file_del)
         begin = time.perf_counter()
         for word in words:
-            hash_table.delete_all(word)
+            hash_table.delete_first(word)
         end = time.perf_counter()
         print("Deleting time [s]: {:.6f}".format(end - begin))
         results.append(end - begin)
@@ -203,7 +203,7 @@ def setup_parser():
     group_m.add_argument("-n", "--number", type=int, default=1000,
                          help="maximum number of words to generate (mode 2/3). Default value = 1000")
     group_m.add_argument("-s", "--seed", type=int, default=None,
-                         help="seed for random words; if not passed, the seed is randomized")
+                         help="seed for random words (mode 2/3); if not passed, the seed is randomized")
 
     return hash_parser
 
