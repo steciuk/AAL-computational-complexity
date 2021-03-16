@@ -4,7 +4,7 @@
 Lukasz Pokorzyński, nr 300251  
 l.pokorzynski@stud.elka.pw.edu.pl  
 Adam Steciuk, nr 300263  
-a.steciuk@stud.elka.pw.edu.pl
+adam.steciuk.stud@pw.edu.pl
 
 ## Temat projektu
 Wariant W11 i W21  
