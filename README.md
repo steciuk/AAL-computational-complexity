@@ -1,7 +1,7 @@
 # Analiza Algorytmów - Projekt - Głęboka analiza złożoności obliczeniowej podstawowych operacji na tablicy mieszającej z wykorzystaniem własnej implementacji generatora pseudo-słów bazującej na próbce języka polskiego.
 Projekt wykonany w ramach przedmiotu AAL (Analiza Algorytmów) w semestrze 2020Z (5 semestr), na kierunku Informatyka, specjalizacji Inżynieria Systemów Informacyjnych (ISI) na Wydziale Elektroniki i Technik Informacyjnych (EiTI) Politechniki Warszawskiej.
 
-**Prowadzący projekt**: dr Grzegorz Blinowski 
+**Prowadzący projekt**: dr Grzegorz Blinowski  
 **Ocena implementacji**: 20/20
 
 ## Autorzy
